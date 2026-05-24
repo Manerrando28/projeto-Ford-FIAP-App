@@ -119,7 +119,7 @@ const pecas: PecaItem[] = [
 export default function PecasScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
-  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, isCompact } = useResponsiveLayout();
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, isCompact, isTablet } = useResponsiveLayout();
   const [cart, setCart] = useState<Record<string, number>>({});
 
   const cartItems = useMemo(() => {
@@ -158,7 +158,7 @@ export default function PecasScreen() {
       maximumFractionDigits: 0,
     }).format(value);
 
-  const productColumns = isCompact ? 1 : 2;
+  const productColumns = isTablet ? 2 : 1;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background, padding: pagePadding }]}>
@@ -167,7 +167,7 @@ export default function PecasScreen() {
           <Text style={[styles.kicker, { color: colors.accent }]}>Loja Ford</Text>
           <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>Catálogo de peças e acessórios</Text>
           <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Monte seu carrinho com itens de manutenção, segurança e personalização para sua Ford.</Text>
-          <View style={styles.heroStats}>
+          <View style={[styles.heroStats, isCompact && styles.heroStatsStack]}>
             <View style={[styles.heroStat, { backgroundColor: colors.surfaceMuted }]}>
               <Text style={[styles.heroStatValue, { color: colors.text }]}>{pecas.length}</Text>
               <Text style={[styles.heroStatLabel, { color: colors.mutedText }]}>Itens</Text>
@@ -264,7 +264,7 @@ export default function PecasScreen() {
                 <Text style={[styles.description, { color: colors.mutedText }]}>{item.descricao}</Text>
                 <Text style={[styles.compatibility, { color: colors.text }]}>Compatível com: {item.compatibilidade}</Text>
 
-                <View style={styles.buyRow}>
+                <View style={[styles.buyRow, isCompact && styles.buyRowStack]}>
                   <Pressable
                     onPress={() => addItem(item.id)}
                     style={({ pressed }) => [styles.buyButton, { backgroundColor: colors.tint, opacity: pressed ? 0.92 : 1 }]}
@@ -311,6 +311,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginTop: 6,
+  },
+  heroStatsStack: {
+    flexDirection: 'column',
   },
   heroStat: {
     flex: 1,
@@ -372,6 +375,7 @@ const styles = StyleSheet.create({
   description: { fontSize: 14, lineHeight: 20 },
   compatibility: { fontSize: 13, lineHeight: 19, fontWeight: '700' },
   buyRow: { flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 4 },
+  buyRowStack: { flexDirection: 'column', alignItems: 'stretch' },
   buyButton: { flex: 1, borderRadius: 16, paddingVertical: 14, alignItems: 'center' },
   buyButtonText: { color: '#fff', fontSize: 14, fontWeight: '800' },
   qtyChip: { flexDirection: 'row', alignItems: 'center', borderRadius: 16, paddingHorizontal: 10, paddingVertical: 8, gap: 10 },

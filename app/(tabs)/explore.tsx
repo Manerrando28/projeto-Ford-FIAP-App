@@ -50,7 +50,7 @@ export default function ExploreScreen() {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Últimas leituras</Text>
           <View style={styles.newsList}>
             {news.map((item) => (
-              <Pressable key={item.id} style={({ pressed }) => [styles.newsCard, { backgroundColor: colors.surfaceMuted, opacity: pressed ? 0.94 : 1 }]} onPress={() => router.push('/detalhes')}>
+              <Pressable key={item.id} style={({ pressed }) => [styles.newsCard, { backgroundColor: colors.surfaceMuted, opacity: pressed ? 0.94 : 1 }]} onPress={() => router.push('/comparacao')}>
                 <Text style={[styles.newsTag, { color: colors.accent }]}>{item.tag}</Text>
                 <Text style={[styles.newsTitle, { color: colors.text }]}>{item.title}</Text>
                 <Text style={[styles.newsText, { color: colors.mutedText }]}>{item.text}</Text>
@@ -72,7 +72,7 @@ export default function ExploreScreen() {
           </View>
         </View>
 
-        <Pressable style={({ pressed }) => [styles.primaryButton, { backgroundColor: colors.tint, opacity: pressed ? 0.92 : 1 }]} onPress={() => router.push('/detalhes')}>
+        <Pressable style={({ pressed }) => [styles.primaryButton, { backgroundColor: colors.tint, opacity: pressed ? 0.92 : 1 }]} onPress={() => router.push('/comparacao')}>
           <Text style={styles.primaryButtonText}>Ver comparador rápido</Text>
         </Pressable>
       </View>

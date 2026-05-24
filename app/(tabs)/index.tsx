@@ -30,7 +30,7 @@ export default function HomeScreen() {
       title: 'Mustang mantém o DNA esportivo com V8 e presença marcante',
       text: 'Uma escolha para quem quer tradição, som forte e condução envolvente.',
       action: 'Comparar modelos',
-      route: '/detalhes',
+      route: '/comparacao',
     },
     {
       id: 'shop-cta',
@@ -46,7 +46,7 @@ export default function HomeScreen() {
     { label: 'Carros', subtitle: 'Linha Ford completa', route: '/carros' },
     { label: 'Loja', subtitle: 'Peças e carrinho', route: '/pecas' },
     { label: 'Novidades', subtitle: 'Conteúdo e destaques', route: '/explore' },
-    { label: 'Guia', subtitle: 'Comparador rápido', route: '/detalhes' },
+    { label: 'Comparar', subtitle: 'Dois modelos lado a lado', route: '/comparacao' },
   ];
 
   const handleSubmit = () => {

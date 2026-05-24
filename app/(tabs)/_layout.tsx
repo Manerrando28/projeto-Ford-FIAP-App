@@ -61,11 +61,32 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="login"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="detalhes"
+        options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
         name="carros"
         options={{
           title: "Carros",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="car.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="comparacao"
+        options={{
+          title: "Comparar",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="arrow.left.arrow.right" color={color} />
           ),
         }}
       />
