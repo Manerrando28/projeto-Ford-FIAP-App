@@ -1,19 +1,9 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useResponsiveLayout } from "@/hooks/use-responsive";
+import { carrosCatalogo } from "./carrosData";
 import { useRouter } from "expo-router";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-const carros = [
-  { id: "1", nome: "Ford Ranger", detalhes: "Picape média, motor 2.2 Diesel, 4x4", foto: require("../../assets/images/fordrangerr.png") },
-  { id: "2", nome: "Ford Ranger Raptor", detalhes: "Versão esportiva, motor 3.0 V6 Bi-Turbo", foto: require("../../assets/images/fordrangerraptor.png") },
-  { id: "3", nome: "Ford Maverick", detalhes: "Picape compacta, motor 2.0 Turbo, estilo urbano", foto: require("../../assets/images/fordmaverick.png") },
-  { id: "4", nome: "Ford Mustang", detalhes: "Esportivo clássico, motor V8, tração traseira", foto: require("../../assets/images/fordmustang.png") },
-  { id: "5", nome: "Ford Bronco", detalhes: "SUV off-road, motor 2.7 V6, design retrô", foto: require("../../assets/images/fordbronco.png") },
-  { id: "6", nome: "Ford Territory", detalhes: "SUV médio, motor 1.5 Turbo, foco em conforto", foto: require("../../assets/images/fordterritory.png") },
-  { id: "7", nome: "Ford Edge", detalhes: "SUV premium, motor 2.0 Turbo, tecnologia avançada", foto: require("../../assets/images/fordedge.png") },
-  { id: "8", nome: "Ford F-150", detalhes: "Picape full-size, motor V8, referência nos EUA", foto: require("../../assets/images/fordf-150.png") },
-];
 
 export default function CarrosScreen() {
   const router = useRouter();
@@ -31,7 +21,7 @@ export default function CarrosScreen() {
       </View>
       <FlatList
         contentContainerStyle={styles.listContent}
-        data={carros}
+        data={carrosCatalogo}
         keyExtractor={(item) => item.id}
         numColumns={isTablet ? 2 : 1}
         columnWrapperStyle={isTablet ? styles.columnGap : undefined}
@@ -49,7 +39,22 @@ export default function CarrosScreen() {
                 <Text style={[styles.text, { color: colors.text }]}>{item.nome}</Text>
                 <Text style={[styles.chevron, { color: colors.accent }]}>›</Text>
               </View>
-              <Text style={[styles.details, { color: colors.mutedText }]}>{item.detalhes}</Text>
+              <Text style={[styles.details, { color: colors.mutedText }]}>{item.subtitulo}</Text>
+              <View style={styles.pillRow}>
+                <View style={[styles.pill, { backgroundColor: colors.accentSoft }]}>
+                  <Text style={[styles.pillLabel, { color: colors.accent }]}>Motor</Text>
+                  <Text style={[styles.pillValue, { color: colors.text }]}>{item.motor}</Text>
+                </View>
+                <View style={[styles.pill, { backgroundColor: colors.surfaceMuted }]}>
+                  <Text style={[styles.pillLabel, { color: colors.mutedText }]}>Potência</Text>
+                  <Text style={[styles.pillValue, { color: colors.text }]}>{item.potencia}</Text>
+                </View>
+              </View>
+              <View style={styles.metaRow}>
+                <Text style={[styles.metaText, { color: colors.mutedText }]}>{item.categoria}</Text>
+                <Text style={[styles.metaText, { color: colors.tint }]}>{item.precoReferencia}</Text>
+              </View>
+              <Text style={[styles.highlight, { color: colors.text }]}>{item.destaque}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -136,6 +141,43 @@ const styles = StyleSheet.create({
   details: {
     fontSize: 14,
     lineHeight: 21,
+  },
+  pillRow: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  pill: {
+    flex: 1,
+    borderRadius: 16,
+    padding: 12,
+    gap: 4,
+  },
+  pillLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.4,
+  },
+  pillValue: {
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: "700",
+  },
+  metaRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  metaText: {
+    flex: 1,
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "700",
+  },
+  highlight: {
+    fontSize: 13,
+    lineHeight: 20,
+    fontWeight: "700",
   },
 });
 

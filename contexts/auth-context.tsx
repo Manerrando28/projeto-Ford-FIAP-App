@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 const ACCOUNT_STORAGE_KEY = '@ford-fiap/auth/account';
 const SESSION_STORAGE_KEY = '@ford-fiap/auth/session';
@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const register = async ({ name, email, password, confirmPassword }: RegisterPayload): Promise<AuthResult> => {
+  const register = useCallback(async ({ name, email, password, confirmPassword }: RegisterPayload): Promise<AuthResult> => {
     const trimmedName = name.trim();
     const normalizedEmail = sanitizeEmail(email);
 
@@ -129,9 +129,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(toAuthUser(nextAccount));
 
     return { success: true };
-  };
+  }, []);
 
-  const login = async ({ email, password }: LoginPayload): Promise<AuthResult> => {
+  const login = useCallback(async ({ email, password }: LoginPayload): Promise<AuthResult> => {
     const normalizedEmail = sanitizeEmail(email);
 
     if (!normalizedEmail || !normalizedEmail.includes('@')) {
@@ -150,12 +150,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(toAuthUser(account));
 
     return { success: true };
-  };
+  }, [account]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     await AsyncStorage.removeItem(SESSION_STORAGE_KEY);
     setUser(null);
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -166,7 +166,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       logout,
     }),
-    [isReady, user]
+    [isReady, login, logout, register, user]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

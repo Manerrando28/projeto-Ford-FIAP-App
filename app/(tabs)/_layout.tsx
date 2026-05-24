@@ -57,6 +57,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="doc.text.fill" color={color} />
           ),
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -71,9 +72,18 @@ export default function TabLayout() {
       <Tabs.Screen
         name="pecas"
         options={{
-          title: "Peças",
+          title: "Loja",
           tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="wrench.fill" color={color} />
+            <IconSymbol size={28} name="cart.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="explore"
+        options={{
+          title: "Novidades",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="newspaper.fill" color={color} />
           ),
         }}
       />
