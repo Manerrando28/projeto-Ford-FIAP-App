@@ -1,4 +1,6 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 const pecas = [
   { id: "1", nome: "Filtro de Óleo", preco: "R$ 80,00", estoque: "Disponível" },
@@ -15,17 +17,27 @@ const pecas = [
 ];
 
 export default function PecasScreen() {
+  const colorScheme = useColorScheme() ?? "light";
+  const colors = Colors[colorScheme];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Catálogo de Peças</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.hero, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Text style={[styles.kicker, { color: colors.accent }]}>Inventário</Text>
+        <Text style={[styles.title, { color: colors.text }]}>Catálogo de peças</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Tabela limpa com disponibilidade e valores em destaque.</Text>
+      </View>
       <FlatList
+        contentContainerStyle={styles.listContent}
         data={pecas}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.nome}>{item.nome}</Text>
-            <Text style={styles.preco}>{item.preco}</Text>
-            <Text style={[styles.estoque, item.estoque === "Disponível" ? styles.disponivel : styles.sobEncomenda]}>
+          <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+            <View style={styles.cardTop}>
+              <Text style={[styles.nome, { color: colors.text }]}>{item.nome}</Text>
+              <Text style={[styles.preco, { color: colors.tint }]}>{item.preco}</Text>
+            </View>
+            <Text style={[styles.estoque, { color: item.estoque === "Disponível" ? colors.success : colors.warning }]}>
               {item.estoque}
             </Text>
           </View>
@@ -36,21 +48,40 @@ export default function PecasScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#f4f6f9" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center", color: "#333" },
+  container: { flex: 1, padding: 20, paddingTop: 24 },
+  hero: {
+    borderWidth: 1,
+    borderRadius: 28,
+    padding: 18,
+    marginBottom: 16,
+    gap: 8,
+  },
+  kicker: {
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  title: { fontSize: 30, lineHeight: 34, fontWeight: "800", letterSpacing: -0.5 },
+  subtitle: { fontSize: 15, lineHeight: 22 },
+  listContent: { gap: 12, paddingBottom: 24 },
   card: {
-    marginBottom: 15,
-    padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    padding: 16,
+    borderRadius: 22,
+    borderWidth: 1,
+    gap: 8,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowOpacity: 0.06,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
     elevation: 3,
   },
-  nome: { fontSize: 18, fontWeight: "bold", color: "#222", marginBottom: 5 },
-  preco: { fontSize: 16, color: "#0078D7", marginBottom: 5 },
-  estoque: { fontSize: 14, fontWeight: "600" },
-  disponivel: { color: "green" },
-  sobEncomenda: { color: "orange" },
+  cardTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  nome: { flex: 1, fontSize: 17, fontWeight: "800" },
+  preco: { fontSize: 15, fontWeight: "800" },
+  estoque: { fontSize: 13, fontWeight: "700" },
 });

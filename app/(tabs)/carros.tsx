@@ -1,5 +1,7 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Colors } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useRouter } from "expo-router";
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const carros = [
   { id: "1", nome: "Ford Ranger", detalhes: "Picape média, motor 2.2 Diesel, 4x4", foto: require("../../assets/images/fordrangerr.png") },
@@ -14,23 +16,33 @@ const carros = [
 
 export default function CarrosScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme() ?? "light";
+  const colors = Colors[colorScheme];
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lista de Carros Ford</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[styles.hero, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Text style={[styles.kicker, { color: colors.accent }]}>Catálogo premium</Text>
+        <Text style={[styles.title, { color: colors.text }]}>Lista de carros Ford</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Selecione um veículo para abrir a ficha com apresentação mais refinada.</Text>
+      </View>
       <FlatList
+        contentContainerStyle={styles.listContent}
         data={carros}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.card}
+            style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
             onPress={() => router.push({ pathname: "/specs", params: { modelo: item.nome } })}
           >
-            {/* Foto do carro */}
             <Image source={item.foto} style={styles.image} />
-
-            {/* Nome do carro */}
-            <Text style={styles.text}>{item.nome}</Text>
+            <View style={styles.cardBody}>
+              <View style={styles.cardHeader}>
+                <Text style={[styles.text, { color: colors.text }]}>{item.nome}</Text>
+                <Text style={[styles.chevron, { color: colors.accent }]}>›</Text>
+              </View>
+              <Text style={[styles.details, { color: colors.mutedText }]}>{item.detalhes}</Text>
+            </View>
           </TouchableOpacity>
         )}
       />
@@ -39,11 +51,76 @@ export default function CarrosScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
-  card: { marginBottom: 20, backgroundColor: "#f9f9f9", padding: 10, borderRadius: 8 },
-  image: { width: "100%", height: 200, borderRadius: 8 },
-  text: { fontSize: 18, marginTop: 10, fontWeight: "bold" },
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 24,
+  },
+  hero: {
+    borderWidth: 1,
+    borderRadius: 28,
+    padding: 18,
+    marginBottom: 16,
+    gap: 8,
+  },
+  kicker: {
+    fontSize: 12,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  title: {
+    fontSize: 30,
+    lineHeight: 34,
+    fontWeight: "800",
+    letterSpacing: -0.5,
+  },
+  subtitle: {
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  listContent: {
+    gap: 14,
+    paddingBottom: 24,
+  },
+  card: {
+    borderWidth: 1,
+    borderRadius: 26,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 4,
+  },
+  image: {
+    width: "100%",
+    height: 220,
+  },
+  cardBody: {
+    padding: 16,
+    gap: 8,
+  },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+  },
+  text: {
+    flex: 1,
+    fontSize: 18,
+    fontWeight: "800",
+  },
+  chevron: {
+    fontSize: 32,
+    lineHeight: 32,
+    fontWeight: "400",
+  },
+  details: {
+    fontSize: 14,
+    lineHeight: 21,
+  },
 });
 
 
