@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useResponsiveLayout } from "@/hooks/use-responsive";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { carrosData } from "./carrosData";
@@ -8,6 +9,7 @@ export default function SpecsScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, imageHeight, isCompact } = useResponsiveLayout();
   const { marca, modelo, versao, atributos, nome } = useLocalSearchParams<{
     marca?: string;
     modelo?: string;
@@ -30,13 +32,14 @@ export default function SpecsScreen() {
   const versaoExibida = dados?.versao ?? versao ?? "-";
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background }]}>
+    <ScrollView contentContainerStyle={[styles.container, { backgroundColor: colors.background, padding: pagePadding }]}>
+      <View style={[styles.shell, { maxWidth: contentMaxWidth }]}>
       <View style={[styles.hero, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <Text style={[styles.kicker, { color: colors.accent }]}>Ficha técnica</Text>
-        <Text style={[styles.title, { color: colors.text }]}>{marcaExibida} {modeloExibido}</Text>
-        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Visual executivo com os dados que você enviou e os atributos reconhecidos da base.</Text>
+        <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>{marcaExibida} {modeloExibido}</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Visual executivo com os dados que você enviou e os atributos reconhecidos da base.</Text>
 
-        <View style={styles.heroMeta}>
+        <View style={[styles.heroMeta, isCompact && styles.heroMetaColumn]}>
           <View style={[styles.metaChip, { backgroundColor: colors.surfaceMuted }]}>
             <Text style={[styles.metaLabel, { color: colors.mutedText }]}>Versão</Text>
             <Text style={[styles.metaValue, { color: colors.text }]}>{versaoExibida}</Text>
@@ -50,7 +53,7 @@ export default function SpecsScreen() {
 
       {dados ? (
         <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <View style={styles.grid}>
+          <View style={[styles.grid, isCompact && styles.gridStack]}>
             <View style={[styles.infoCard, { backgroundColor: colors.surfaceMuted }]}>
               <Text style={[styles.infoLabel, { color: colors.mutedText }]}>Marca</Text>
               <Text style={[styles.infoValue, { color: colors.text }]}>{dados.marca}</Text>
@@ -61,7 +64,7 @@ export default function SpecsScreen() {
             </View>
           </View>
 
-          {dados.foto ? <Image source={dados.foto} style={styles.image} /> : null}
+          {dados.foto ? <Image source={dados.foto} style={[styles.image, { height: imageHeight }]} /> : null}
 
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Atributos principais</Text>
           <View style={styles.attributesList}>
@@ -87,6 +90,7 @@ export default function SpecsScreen() {
       <Pressable style={({ pressed }) => [styles.primaryButton, { backgroundColor: colors.tint, opacity: pressed ? 0.92 : 1 }]} onPress={() => router.push("/carros")}>
         <Text style={styles.primaryButtonText}>Voltar para carros</Text>
       </Pressable>
+      </View>
     </ScrollView>
   );
 }
@@ -94,9 +98,13 @@ export default function SpecsScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    alignItems: "center",
     gap: 16,
     paddingBottom: 28,
+  },
+  shell: {
+    width: "100%",
+    gap: 16,
   },
   hero: {
     borderWidth: 1,
@@ -130,6 +138,9 @@ const styles = StyleSheet.create({
     gap: 10,
     marginTop: 6,
   },
+  heroMetaColumn: {
+    flexDirection: "column",
+  },
   metaChip: {
     flex: 1,
     borderRadius: 18,
@@ -159,6 +170,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
   },
+  gridStack: {
+    flexDirection: "column",
+  },
   infoCard: {
     flex: 1,
     borderRadius: 18,
@@ -175,7 +189,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 190,
+    aspectRatio: 1.55,
     borderRadius: 22,
     resizeMode: "cover",
   },

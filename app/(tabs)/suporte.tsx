@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useResponsiveLayout } from "@/hooks/use-responsive";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
@@ -7,11 +8,13 @@ export default function SuporteScreen() {
   const [descricao, setDescricao] = useState("");
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize } = useResponsiveLayout();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Suporte ao cliente</Text>
-      <Text style={[styles.subtitle, { color: colors.mutedText }]}>Um fluxo mais claro para abertura de chamados e contato direto.</Text>
+    <View style={[styles.container, { backgroundColor: colors.background, padding: pagePadding }]}>
+      <View style={[styles.shell, { maxWidth: contentMaxWidth }]}>
+      <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>Suporte ao cliente</Text>
+      <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Um fluxo mais claro para abertura de chamados e contato direto.</Text>
 
       <View style={[styles.contactCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <Text style={[styles.contactTitle, { color: colors.text }]}>Entre em contato</Text>
@@ -34,6 +37,7 @@ export default function SuporteScreen() {
           <Text style={styles.primaryButtonText}>Abrir chamado</Text>
         </Pressable>
       </View>
+      </View>
     </View>
   );
 }
@@ -41,10 +45,10 @@ export default function SuporteScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 24,
+    alignItems: "center",
     gap: 14,
   },
+  shell: { width: "100%", gap: 14 },
   title: {
     fontSize: 30,
     fontWeight: "800",

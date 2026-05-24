@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useResponsiveLayout } from "@/hooks/use-responsive";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 const pecas = [
@@ -19,13 +20,15 @@ const pecas = [
 export default function PecasScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, isCompact } = useResponsiveLayout();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background, padding: pagePadding }]}>
+      <View style={[styles.shell, { maxWidth: contentMaxWidth }]}>
       <View style={[styles.hero, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <Text style={[styles.kicker, { color: colors.accent }]}>Inventário</Text>
-        <Text style={[styles.title, { color: colors.text }]}>Catálogo de peças</Text>
-        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Tabela limpa com disponibilidade e valores em destaque.</Text>
+        <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>Catálogo de peças</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Tabela limpa com disponibilidade e valores em destaque.</Text>
       </View>
       <FlatList
         contentContainerStyle={styles.listContent}
@@ -33,7 +36,7 @@ export default function PecasScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <View style={styles.cardTop}>
+            <View style={[styles.cardTop, isCompact && styles.cardTopStack]}>
               <Text style={[styles.nome, { color: colors.text }]}>{item.nome}</Text>
               <Text style={[styles.preco, { color: colors.tint }]}>{item.preco}</Text>
             </View>
@@ -43,12 +46,14 @@ export default function PecasScreen() {
           </View>
         )}
       />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, paddingTop: 24 },
+  container: { flex: 1, alignItems: "center" },
+  shell: { width: "100%", gap: 16 },
   hero: {
     borderWidth: 1,
     borderRadius: 28,
@@ -80,6 +85,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 12,
+  },
+  cardTopStack: {
+    flexDirection: "column",
   },
   nome: { flex: 1, fontSize: 17, fontWeight: "800" },
   preco: { fontSize: 15, fontWeight: "800" },

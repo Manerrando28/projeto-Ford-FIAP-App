@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useResponsiveLayout } from "@/hooks/use-responsive";
 import { useRouter } from "expo-router";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -18,24 +19,31 @@ export default function CarrosScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, imageHeight, isTablet } = useResponsiveLayout();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background, padding: pagePadding }]}>
+      <View style={[styles.shell, { maxWidth: contentMaxWidth }]}>
       <View style={[styles.hero, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <Text style={[styles.kicker, { color: colors.accent }]}>Catálogo premium</Text>
-        <Text style={[styles.title, { color: colors.text }]}>Lista de carros Ford</Text>
-        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Selecione um veículo para abrir a ficha com apresentação mais refinada.</Text>
+        <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>Lista de carros Ford</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Selecione um veículo para abrir a ficha com apresentação mais refinada.</Text>
       </View>
       <FlatList
         contentContainerStyle={styles.listContent}
         data={carros}
         keyExtractor={(item) => item.id}
+        numColumns={isTablet ? 2 : 1}
+        columnWrapperStyle={isTablet ? styles.columnGap : undefined}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            style={[
+              styles.card,
+              { backgroundColor: colors.surface, borderColor: colors.border, flex: isTablet ? 1 : undefined },
+            ]}
             onPress={() => router.push({ pathname: "/specs", params: { modelo: item.nome } })}
           >
-            <Image source={item.foto} style={styles.image} />
+            <Image source={item.foto} style={[styles.image, { height: imageHeight }]} />
             <View style={styles.cardBody}>
               <View style={styles.cardHeader}>
                 <Text style={[styles.text, { color: colors.text }]}>{item.nome}</Text>
@@ -46,6 +54,7 @@ export default function CarrosScreen() {
           </TouchableOpacity>
         )}
       />
+      </View>
     </View>
   );
 }
@@ -53,8 +62,12 @@ export default function CarrosScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    paddingTop: 24,
+    alignItems: "center",
+  },
+  shell: {
+    width: "100%",
+    flex: 1,
+    gap: 16,
   },
   hero: {
     borderWidth: 1,
@@ -83,6 +96,9 @@ const styles = StyleSheet.create({
     gap: 14,
     paddingBottom: 24,
   },
+  columnGap: {
+    gap: 14,
+  },
   card: {
     borderWidth: 1,
     borderRadius: 26,
@@ -95,7 +111,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 220,
+    aspectRatio: 1.48,
   },
   cardBody: {
     padding: 16,

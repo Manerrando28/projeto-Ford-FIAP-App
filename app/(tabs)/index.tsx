@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useResponsiveLayout } from "@/hooks/use-responsive";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
@@ -12,6 +13,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? "light";
   const colors = Colors[colorScheme];
+  const { pagePadding, contentMaxWidth, titleSize, bodyTextSize, isCompact } = useResponsiveLayout();
 
   const handleSubmit = () => {
     router.push({
@@ -21,15 +23,16 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, { padding: pagePadding }]}>
+      <View style={[styles.shell, { maxWidth: contentMaxWidth }]}>
       <View style={styles.hero}>
         <View style={[styles.badge, { backgroundColor: colors.accentSoft }]}>
           <Text style={[styles.badgeText, { color: colors.accent }]}>Ford Intelligence Suite</Text>
         </View>
-        <Text style={[styles.title, { color: colors.text }]}>Inteligência competitiva automotiva</Text>
-        <Text style={[styles.subtitle, { color: colors.mutedText }]}>Compare veículos, organize atributos e gere especificações com uma interface mais limpa e executiva.</Text>
+        <Text style={[styles.title, { color: colors.text, fontSize: titleSize }]}>Inteligência competitiva automotiva</Text>
+        <Text style={[styles.subtitle, { color: colors.mutedText, fontSize: bodyTextSize }]}>Compare veículos, organize atributos e gere especificações com uma interface mais limpa e executiva.</Text>
 
-        <View style={styles.metricsRow}>
+        <View style={[styles.metricsRow, isCompact && styles.metricsColumn]}>
           <View style={[styles.metricCard, { backgroundColor: colors.surface }]}>
             <Text style={[styles.metricValue, { color: colors.text }]}>08</Text>
             <Text style={[styles.metricLabel, { color: colors.mutedText }]}>Modelos em catálogo</Text>
@@ -90,6 +93,7 @@ export default function HomeScreen() {
           <Text style={styles.primaryButtonText}>Gerar especificações</Text>
         </Pressable>
       </View>
+      </View>
     </ScrollView>
   );
 }
@@ -97,10 +101,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
-    paddingTop: 24,
+    alignItems: "center",
+    paddingVertical: 24,
     paddingBottom: 32,
     gap: 18,
+  },
+  shell: {
+    width: "100%",
+    gap: 18,
+    alignSelf: "center",
   },
   hero: {
     gap: 12,
@@ -131,6 +140,9 @@ const styles = StyleSheet.create({
   metricsRow: {
     flexDirection: "row",
     gap: 12,
+  },
+  metricsColumn: {
+    flexDirection: "column",
   },
   metricCard: {
     flex: 1,
