@@ -59,8 +59,9 @@ Assista ao fluxo completo, incluindo cadastro, login, validações e monitoramen
 
 | Tela  | Tela  | Tela  |
 | :---: | :---: | :---: |
-| ![Image 6](./assets/images/Image%20(6).jpg) | ![Image 5](./assets/images/Image%20(5).jpg) | ![Image 4](./assets/images/Image%20(4).jpg) |
-| ![Image 3](./assets/images/Image%20(3).jpg) | ![Image 2](./assets/images/Image%20(2).jpg) | ![Image 1](./assets/images/Image%20(1).jpg) |
+| ![Image 6](assets/images/IMG-20260524-WA0160.jpg) | ![Image 5](assets/images/IMG-20260524-WA0153.jpg) | ![Image 4](assets/images/IMG-20260524-WA0156.jpg) |
+| ![Image 3](assets/images/IMG-20260524-WA0152.jpg) | ![Image 2](assets/images/IMG-20260524-WA0154.jpg) | ![Image 1](assets/images/IMG-20260524-WA0155.jpg) |
+| ![Image 7](assets/images/IMG-20260524-WA0157.jpg) | ![Image 8](assets/images/IMG-20260524-WA0151.jpg) | ![Image 9](assets/images/IMG-20260524-WA0159.jpg) |
 
 ---
 
